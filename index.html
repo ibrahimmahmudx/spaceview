@@ -407,7 +407,6 @@
       .tele-cell,.moon-stats .ms,.planet-stats .ps{ border-radius:8px; }
       .hand-note{ font-family:"Caveat", cursive; font-size:1.25rem; line-height:1; color:var(--nasa-red); transform: rotate(-2deg); display:inline-block; font-weight:700; }
       @media (prefers-color-scheme: dark){ .hand-note{ color:#ff8a7a; } }
-      .index-tag{ font-family:"Space Mono",monospace; font-size:.72rem; letter-spacing:.14em; border:1.5px solid var(--ink); padding:3px 7px; border-radius:999px; white-space:nowrap; }
       .tape{ position:relative; }
       .tape::before{ content:""; position:absolute; top:-10px; left:28px; width:72px; height:20px; background:rgba(242,182,61,.55); transform:rotate(-3deg); border-left:1px dashed rgba(0,0,0,.12); border-right:1px dashed rgba(0,0,0,.12); z-index:2; pointer-events:none; }
 
@@ -686,10 +685,6 @@
       .sec-head { border-top: none; padding-top: 0; align-items: baseline; gap: 8px 16px; margin-bottom: 20px; position: static; }
       .sec-head h2 { font-family: inherit; font-weight: 800; font-size: clamp(1.65rem, 3.4vw, 2.15rem); letter-spacing: -0.03em; line-height: 1.1; max-width: none; }
       .sec-head .hint { font-family: inherit; font-size: 0.92rem; letter-spacing: 0; text-transform: none; color: var(--ink-soft); max-width: 40ch; line-height: 1.5; padding-bottom: 0; }
-      .index-tag {
-        font-family: inherit; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em;
-        background: var(--panel-2); color: var(--ink-soft); border: none; border-radius: 999px; padding: 5px 11px;
-      }
       .hand-note, .margin-scribble {
         font-family: inherit; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.13em;
         text-transform: uppercase; color: var(--accent-solid); transform: none; line-height: 1.4;
@@ -1225,7 +1220,6 @@
       <!-- ================= LAUNCHES ================= -->
       <section class="block" id="launches">
         <div class="sec-head">
-          <span class="index-tag">01 / LAUNCHES</span>
           <h2 data-i18n="lnTitle">আসন্ন রকেট উৎক্ষেপণ</h2>
           <span class="hint" data-i18n="lnDesc">সব সময় ঢাকার সময় অনুযায়ী</span>
           <span class="hand-note">counting down…</span>
@@ -1237,7 +1231,6 @@
       <!-- ================= ISS PASSES OVER DHAKA ================= -->
       <section class="block" id="passes">
         <div class="sec-head">
-          <span class="index-tag">02 / YOUR SKY</span>
           <h2 data-i18n="passTitle">ঢাকা থেকে ISS দেখুন</h2>
           <span class="hint" data-i18n="passDesc">খালি চোখে দেখা যাওয়ার সময় · ঢাকার স্থানীয় সময়</span>
           <span class="hand-note">look up!</span>
@@ -1249,7 +1242,6 @@
       <!-- ================= PEOPLE IN SPACE ================= -->
       <section class="block" id="crew">
         <div class="sec-head">
-          <span class="index-tag">03 / PEOPLE</span>
           <h2 data-i18n="crewTitle">এখন মহাকাশে কারা আছেন</h2>
           <span class="hand-note">humans, off Earth →</span>
         </div>
@@ -1281,7 +1273,6 @@
       <!-- ================= PLANETS ================= -->
       <section class="block" id="planets">
         <div class="sec-head">
-          <span class="index-tag">05 / ORBITS</span>
           <h2 data-i18n="plTitle">সৌরজগৎ ভ্রমণ</h2>
           <span class="hint" data-i18n="plDesc">একটা গ্রহ বেছে নাও — সব ছবি NASA-র মহাকাশযানের তোলা</span>
           <span class="hand-note" data-i18n="plHand">try spinning it ↓</span>
