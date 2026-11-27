@@ -937,46 +937,65 @@
     </style>
     <style>
       /* ---------- ONE mobile tab — beside the language toggle ----------
-         On mobile there is exactly ONE tab: a single pill button in the
+         On mobile there is exactly ONE menu button: a single pill in the
          header's utils cluster, right next to the EN/বাংলা toggle, in the
-         same design as that toggle. Every section of the page — Live Map,
-         Today's Photo, ISS Near You, Astronauts, Today's Moon, the Solar
-         System Tour and Upcoming Launches — lives inside that one tab's
-         panel (#allSectionsPanel); nothing renders outside it on mobile.
-         Tapping the tab opens/closes the panel. On desktop there is no
-         tab at all: the wrapper is display:contents and the page is the
-         plain single scrolling page, exactly as before. */
+         same design as that toggle. On mobile the section links
+         (nav.toc — Live Map, Today's Photo, ISS Near You, Astronauts,
+         Today's Moon, the Solar System Tour and Upcoming Launches) are
+         hidden by default; tapping the button opens them as a dropdown
+         list under the header, and tapping a link closes the list again.
+         The page sections themselves always render, in their normal
+         order, inside #allSectionsPanel. On desktop there is no menu
+         button at all: the toc shows inline as before, the wrapper is
+         display:contents and the page is the plain single scrolling
+         page, exactly as before. */
       .section-tabs { display: none; }
       .all-sections-panel { display: contents; }
       /* Anchor targets clear the sticky header when scrolled to. */
       #tracker, #launches, #passes, #crew, #planets, #today, #apod, #countdownCard,
       section.block, .spread, .card[id] { scroll-margin-top: 96px; }
       @media (max-width: 900px) {
-        /* The single tab takes one compact row of its own inside the header
-           block, directly under the live-chip / language-toggle row — it
-           stays part of the header, never a separate bar lower on the page. */
+        /* The menu button stays a compact pill inside the header-utils
+           cluster, right beside the live chip and the EN/বাংলা toggle —
+           never a full-width bar of its own. */
         .header-utils { order: 2; flex: 1 1 100%; margin-left: 0; }
         .section-tabs {
           display: inline-flex; align-items: center; gap: 2px;
           background: var(--panel); border: 1px solid var(--line);
           border-radius: 999px; padding: 3px;
-          flex: 1 1 100%; order: 5;
+          flex: 0 0 auto;
         }
         .section-tabs button {
-          flex: 1 1 0; min-width: 0;
           font-family: inherit; font-size: 0.92rem; font-weight: 600; letter-spacing: 0.01em;
           color: var(--ink-soft); background: transparent; border: none;
-          border-radius: 999px; padding: 8px 10px; min-height: 38px;
+          border-radius: 999px; padding: 8px 14px; min-height: 38px;
           line-height: 1.2; text-align: center; cursor: pointer; white-space: nowrap;
-          overflow: hidden; text-overflow: ellipsis;
         }
-        .section-tabs button[aria-selected="true"] { background: var(--accent-solid); color: #ffffff; }
+        .section-tabs button::after { content: " ▾"; font-size: 0.8em; }
+        .section-tabs button[aria-expanded="true"] { background: var(--accent-solid); color: #ffffff; }
         @media (prefers-color-scheme: dark) {
-          .section-tabs button[aria-selected="true"] { color: #06202f; }
+          .section-tabs button[aria-expanded="true"] { color: #06202f; }
         }
-        /* The one tab panel: a single contained area holding ALL sections
-           in their normal order — map, photo, passes, crew, moon, planets,
-           launches. Nothing of them sits outside this box on mobile. */
+        /* The section links are hidden by default on mobile. Tapping the
+           menu button adds .menu-open and they appear as one dropdown
+           list inside the header, under the header rows; tapping a link
+           navigates and the script closes the list again. */
+        .site-header nav.toc { display: none; }
+        .site-header nav.toc.menu-open {
+          display: flex; flex-direction: column; align-items: stretch;
+          order: 3; flex: 1 1 100%;
+          background: var(--panel); border: 1px solid var(--line);
+          border-radius: 14px; padding: 6px; gap: 2px; margin-top: 2px;
+        }
+        .site-header nav.toc.menu-open a {
+          display: flex; align-items: center; justify-content: flex-start;
+          padding: 10px 14px; min-height: 44px; border-radius: 10px;
+          font-size: 0.95rem;
+        }
+        .site-header nav.toc.menu-open a:hover { background: var(--panel-2); }
+        /* A single contained area holding ALL sections in their normal
+           order — map, photo, passes, crew, moon, planets, launches.
+           It always renders on mobile; only the link list collapses. */
         .all-sections-panel {
           display: block;
           background: var(--panel-2);
@@ -985,7 +1004,6 @@
           padding: 2px 12px 22px;
           margin-top: 10px;
         }
-        .all-sections-panel.tab-closed { display: none; }
         #tracker, #launches, #passes, #crew, #planets, #today, #apod, #countdownCard,
         section.block, .spread, .card[id] { scroll-margin-top: 188px; }
       }
@@ -1056,7 +1074,7 @@
     <header class="site-header">
       <div class="wrap header-in">
         <div class="logo" aria-label="SpaceView">SPACEVIEW</div>
-        <nav class="toc" aria-label="Sections">
+        <nav class="toc" id="sectionMenu" aria-label="Sections">
           <a href="#tracker" data-i18n="tocIss">Live Map</a>
           <a href="#apod" data-i18n="tocApod">Today&rsquo;s Photo</a>
           <a href="#passes" data-i18n="tocPasses">ISS Near You</a>
@@ -1071,8 +1089,8 @@
             <button type="button" id="langBn" aria-pressed="false">বাংলা</button>
             <button type="button" id="langEn" aria-pressed="true">EN</button>
           </div>
-          <div class="section-tabs" id="headerTabs" role="tablist" aria-label="Sections">
-            <button type="button" id="allSectionsTab" role="tab" aria-selected="true" aria-expanded="true" aria-controls="allSectionsPanel" data-i18n="tabAll">All Sections</button>
+          <div class="section-tabs" id="headerTabs">
+            <button type="button" id="allSectionsTab" aria-expanded="false" aria-haspopup="true" aria-controls="sectionMenu" data-i18n="tabAll">All Sections</button>
           </div>
         </div>
       </div>
@@ -1102,10 +1120,12 @@
     </div>
 
     <main class="wrap">
-      <!-- On mobile every section below lives inside this ONE tab panel —
-           the single header tab controls it. On desktop the wrapper is
-           display:contents, so the page is the plain single page as before. -->
-      <div class="all-sections-panel" id="allSectionsPanel" role="tabpanel" aria-labelledby="allSectionsTab">
+      <!-- Every section below lives inside this wrapper. On mobile the
+           sections always render; only the header's section LINK LIST
+           collapses behind the single menu button beside the EN/বাংলা
+           toggle. On desktop the wrapper is display:contents, so the page
+           is the plain single page as before. -->
+      <div class="all-sections-panel" id="allSectionsPanel">
 
       <!-- ================= DASHBOARD ROW 1: MAP + TELEMETRY ================= -->
       <div class="dash" id="tracker">
@@ -2686,49 +2706,41 @@
       setInterval(renderMoon, 3600000);
     </script>
     <script>
-      /* ============ ONE mobile tab — every section inside a single panel ============
-         On mobile the header shows ONE tab button (#allSectionsTab, beside
-         the EN/বাংলা toggle). ALL sections — Live Map + telemetry, Today's
-         Photo, ISS Near You, Astronauts, Today's Moon, Solar System Tour,
-         Upcoming Launches + countdown — live inside its single panel
-         (#allSectionsPanel) in their normal order; nothing renders outside
-         the panel on mobile. Tapping the tab opens/closes the panel.
-         On desktop the tab is hidden and the panel wrapper is
-         display:contents, so the full single page shows exactly as before. */
+      /* ============ ONE mobile menu button — the section list, collapsed ============
+         On mobile the header shows ONE menu button (#allSectionsTab, beside
+         the EN/বাংলা toggle; its label follows the language via data-i18n).
+         The section links (nav.toc) are hidden by default; tapping the
+         button opens them as a dropdown list in the header, and tapping a
+         link navigates to that section and closes the list. The sections
+         themselves always render — nothing about the page content is
+         hidden. On desktop the button is hidden (CSS) and the toc shows
+         inline, so the full single page is exactly as before. */
       (function () {
         var btn = document.getElementById('allSectionsTab');
-        var panel = document.getElementById('allSectionsPanel');
-        if (!btn || !panel) return;
+        var menu = document.getElementById('sectionMenu');
+        if (!btn || !menu) return;
         function isMobile() { return window.matchMedia('(max-width: 900px)').matches; }
         function setOpen(open) {
-          panel.classList.toggle('tab-closed', !open);
+          menu.classList.toggle('menu-open', open);
           btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-          btn.setAttribute('aria-selected', open ? 'true' : 'false');
-          if (open) {
-            /* The ISS map lives inside the panel — nudge it to re-measure
-               whenever the panel (re)opens so it never renders stale. */
-            setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 80);
-          }
         }
         btn.addEventListener('click', function () {
           if (!isMobile()) return;
-          var open = panel.classList.contains('tab-closed');
-          setOpen(open);
-          if (open) {
-            var h = document.querySelector('.site-header');
-            var hh = h ? h.offsetHeight : 0;
-            var y = panel.getBoundingClientRect().top + window.pageYOffset - hh - 8;
-            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-          }
+          setOpen(!menu.classList.contains('menu-open'));
         });
-        /* Nav links point at sections inside the panel — if the panel is
-           closed on mobile, open it first so the link lands somewhere real. */
-        document.querySelectorAll('nav.toc a[href^="#"]').forEach(function (a) {
+        /* Tapping a section link enters that section and closes the list. */
+        menu.querySelectorAll('a[href^="#"]').forEach(function (a) {
           a.addEventListener('click', function () {
-            if (isMobile() && panel.classList.contains('tab-closed')) setOpen(true);
+            if (isMobile()) setOpen(false);
           });
         });
-        /* One resize nudge after load lets the in-panel map settle at its
+        /* Growing past the mobile breakpoint resets the menu state so the
+           desktop inline nav never inherits a stale open/closed class. */
+        var mq = window.matchMedia('(max-width: 900px)');
+        if (mq.addEventListener) {
+          mq.addEventListener('change', function (e) { if (!e.matches) setOpen(false); });
+        }
+        /* One resize nudge after load lets the ISS map settle at its
            final size. */
         window.addEventListener('load', function () {
           setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 120);
